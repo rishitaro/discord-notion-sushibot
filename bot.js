@@ -45,20 +45,41 @@ const createBot = () => {
         }
     });
 
+    /*
+    SELECT MENU HANDLER
+    */
     client.on('interactionCreate', async interaction => {
         if (!interaction.isSelectMenu()) return;
         console.log('in select menu handler');
         
+        const command = fetchCommand(client.commands, interaction.message.interaction.commandName);
+        if (!command) return;
+
+        try {
+            await command.executeSelect(interaction);
+        } catch (error) {
+            console.error(error);
+            await interaction.reply({ content: 'There was an error while executing this command', ephemeral: true});
+        }
+    });
+
+
+    /* 
+    BUTTON HANDLER
+    */
+    client.on('interactionCreate', async interaction => {
+        if (!interaction.isButton()) return;
+        console.log('in button handler');
+        // console.log(interaction);
         const command = fetchCommand(client.commands, interaction.message.interaction.commandName)
         if (!command) return;
 
         try {
-            await command.replySelect(interaction);
+            await command.executeButton(interaction);
         } catch (error) {
             console.error(error);
-            await interaction.reply({ content: 'There was an error while executing this command', ephemeral: true})
+            await interaction.reply({ content: 'There was an error while executing this command', ephemeral: true});
         }
-        console.log('interaction', interaction);
     });
 
     client.login(process.env.DISCORD_NOTION_BOT_TOKEN);
