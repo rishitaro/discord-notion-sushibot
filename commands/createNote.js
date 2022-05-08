@@ -4,17 +4,12 @@ const { request } = require('http');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('create-note')
+        .setName('createnote')
         .setDescription('Creates a notion page under `meeting notes`.')
         .addStringOption(option =>
             option.setName('title')
                 .setDescription('what would you like to call this page in notion?')
-                .setRequired(true))
-        .addBooleanOption(option =>
-            option.setName('eng_notebook')
-                .setDescription('would you like to append this meeting note into the next engineering notebook entry?')
-                .setRequired(true)
-        ),
+                .setRequired(true)),
     async execute(interaction) {
         start(interaction);
     },
@@ -27,7 +22,6 @@ module.exports = {
 }
 
 let title;
-let engNotebook;
 
 const start = async (interaction) => {
     console.log('start create-note command');
@@ -44,10 +38,10 @@ const handleSelect = async (interaction) => {
     const embed = new MessageEmbed()
         .setColor('#0099ff')
         .setTitle('Creating Note')
-        .setDescription(blockQuote(bold('Title: ') + title + '\n' + bold('Engineering Notebook?: ') + engNotebook + '\n' + bold('Tags: ') + interaction.values));
+        .setDescription(blockQuote(bold('Title: ') + title + '\n' + bold('Tags: ') + interaction.values));
 
     // await interaction.update({ content: " ", embeds: [embed], components: [] });
-    await interaction.update({ content: blockQuote(bold('Title: ') + title + '\n' + bold('Engineering Notebook?: ') + engNotebook + '\n' + bold('Tags: ') + interaction.values), components: [] });
+    await interaction.update({ content: blockQuote(bold('Title: ') + title + '\n' + bold('Tags: ') + interaction.values), components: [] });
 
     // add notion page creation here 😵😵
 

@@ -4,7 +4,8 @@
   "description": "discord bot to integrate with the sushi squad notion workspace",
   "main": "index.js",
   "scripts": {
-    "test": "npm test"
+    "test": "npm test",
+    "deploy": "node deploy-commands.js"
   },
   "author": "rishitaro",
   "license": "ISC",
