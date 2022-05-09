@@ -1,9 +1,10 @@
-require('dotenv/config')
 const { Client, Collection, Intents } = require('discord.js');
+const { getUser, createMeetingNotesPage, getDatabase } = require('./notion.js');
 
 const fs = require('node:fs');
 
 const createBot = () => {
+
     const client = new Client({
         intents: [
             Intents.FLAGS.GUILDS,
@@ -23,13 +24,34 @@ const createBot = () => {
         console.log(`Logged in as ${client.user.tag}`);
     })
 
+    /*
+    MESSAGE CREATE HANDLER 
+    */
     client.on('messageCreate', async message => {
-        if (message.mentions.has(client.user)) {
+        if (message.mentions.has(client.user) ) {
             console.log("received message hehe");
-            message.reply("Hello " + message.author.username);
+            console.log('fetching notion user');
+            const notionUser = await getUser(message.author.tag);
+            if (message.content.includes('test user')) {
+                if (notionUser) {
+                    message.reply(`Hello ${message.author.username}, you exist in the Team Roster DB`);
+                } else {
+                    message.reply("who are you");
+                }
+            } else if (message.content.includes('test page')) {
+                const response = await createMeetingNotesPage('title for testing', ['imagery', 'business'], notionUser);
+                message.reply('You can find the test page here: ' + response);
+            } else if (message.content.includes('test db')) {
+                const response = await getTestDatabase();
+                console.log(response);
+                message.reply('Successfully fetched db: ' + response.title[0].plain_text);
+            }
         }
     })
 
+    /*
+    SLASH COMMAND HANDLER 
+    */
     client.on('interactionCreate', async interaction => {
         if (!interaction.isCommand()) return;
         console.log('in command handler');
