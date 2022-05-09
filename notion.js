@@ -51,9 +51,11 @@ const createMeetingNotesPage = async (pageTitle, tags, requester) => {
             properties: createProperties(pageTitle, tags, requester),
         });
 
+        console.log('Created new page: ' + response.url);
         return response;
     } catch (exception) {
         console.error(exception.body);
+        throw exception;
     }
 }
 

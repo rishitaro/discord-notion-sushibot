@@ -46,17 +46,26 @@ const handleSelect = async (interaction) => {
         // update initial slash command reply to remove selector once acked
         await interaction.update({ content: bold('Creating page with the following properties:')+ '\n' + blockQuote(italic('Title:') + ' ' + title + '\n' + italic('Tags:') + ' ' + interaction.values), components: [] });
 
-        const notionPageResponse = await createMeetingNotesPage(title, interaction.values, requester);
-        const description = italic(`The page was created under the ${hyperlink('Meeting Notes', 'https://www.notion.so/redmondrobotics/Meeting-Notes-b1cc40e291104bb6ab8cb2ccbf79150f')} page in the 7461 workspace.`);
+        try {
+            // create page in notion
+            const notionPageResponse = await createMeetingNotesPage(title, interaction.values, requester);
 
-        const embed = new MessageEmbed()
-            .setColor('#FCD6F6')
-            .setTitle('Notion Page Link')
-            .setURL(notionPageResponse.url)
-            .setDescription(description)
-            .setThumbnail('https://i.ibb.co/6sD4Kb0/Group-1sparkie.png');
+            // create message embed 
+            const description = italic(`The page was created under the ${hyperlink('Meeting Notes', 'https://www.notion.so/redmondrobotics/Meeting-Notes-b1cc40e291104bb6ab8cb2ccbf79150f')} section in the 7461 workspace.`);
 
-        await interaction.followUp({ content: ' ', embeds: [embed] });
+            const embed = new MessageEmbed()
+                .setColor('#FCD6F6')
+                .setTitle(`${title} - Notion Page Link`)
+                .setURL(notionPageResponse.url)
+                .setDescription(description)
+                .setThumbnail('https://i.ibb.co/6sD4Kb0/Group-1sparkie.png');
+
+            // send followup
+            await interaction.followUp({ content: ' ', embeds: [embed] });
+        } catch (exception) {
+            // exception should already be logged at this point 
+            await interaction.followUp({content: 'There was a problem processing your request. Please try again later.', ephemeral: true})
+        }
 
         title = '';
         requester = null;
