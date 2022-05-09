@@ -1,4 +1,4 @@
-require('dotenv/config');
+require('custom-env').env();
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');

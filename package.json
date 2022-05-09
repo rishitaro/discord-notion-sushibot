@@ -4,17 +4,21 @@
   "description": "discord bot to integrate with the sushi squad notion workspace",
   "main": "index.js",
   "scripts": {
-    "test": "npm test",
-    "deploy": "node deploy-commands.js"
+    "start": "set NODE_ENV=production&& node .",
+    "test": "node .",
+    "deploy_commands_dev": "node deploy-commands.js",
+    "deploy_commands_prod": "set NODE_ENV=production&& node deploy-commands.js"
   },
   "author": "rishitaro",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "@discordjs/builders": "^0.13.0",
     "@discordjs/rest": "^0.4.1",
     "@notionhq/client": "^1.0.4",
+    "custom-env": "^2.0.1",
     "discord-api-types": "^0.32.1",
     "discord.js": "^13.6.0",
-    "dotenv": "^16.0.0"
+    "dotenv": "^16.0.0",
+    "dotenv-vault": "^0.5.1"
   }
 }
